@@ -25,7 +25,7 @@ void validate_directory(DIR *dir) {
 }
 
 char *concat_cwd(char *cwd, char *file_name) {
-  int cwd_sz       = strlen(cwd);
+  int cwd_sz = strlen(cwd);
   int file_name_sz = strlen(file_name);
   char *res;
 
@@ -54,8 +54,8 @@ void free_mem(Stack *stack, HashTable *hash_table, DIR *dir) {
 
 Stack *file_search(char *file_name) {
 
-  Stack *stack          = stack_alloc();
-  Stack *results        = stack_alloc();
+  Stack *stack = stack_alloc();
+  Stack *results = stack_alloc();
   HashTable *hash_table = hashtable_alloc();
 
   char cwd_buf[CWD_BUF_CAP];
@@ -82,8 +82,8 @@ Stack *file_search(char *file_name) {
         // Put it into the hashtable. If it is already there, skip. Otherwise,
         // put it into the stack.
         hashtable_put(hash_table, cwd_with_filename)
-            ? stack_push(stack, cwd_with_filename)
-            : free(cwd_with_filename);
+          ? stack_push(stack, cwd_with_filename)
+          : free(cwd_with_filename);
       }
 
       // Found the file.
@@ -97,14 +97,10 @@ Stack *file_search(char *file_name) {
     }
 
     // If there is something in the stack, switch to that directory.
-    if (!stack_empty(stack)) {
-      chdir(stack_pop(stack));
-    }
-
     // Otherwise, navigate back a directory.
-    else {
-      chdir("..");
-    }
+    !stack_empty(stack)
+      ? chdir(stack_pop(stack))
+      : chdir("..");
   }
 
   // Cleanup.
