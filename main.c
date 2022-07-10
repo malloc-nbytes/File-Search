@@ -114,7 +114,7 @@ Stack *file_search(char *file_name) {
 
 void check_args(int argc) {
   if (argc < 2 || argc > 2) {
-    panic("usage: ./file_search <filename>")
+    panic("usage: ./file_search <filename>");
   }
 }
 
