@@ -24,6 +24,7 @@ void validate_directory(DIR *dir) {
   }
 }
 
+/* Append /filename at the end of the cwd. */
 char *concat_cwd(char *cwd, char *file_name) {
   int cwd_sz = strlen(cwd);
   int file_name_sz = strlen(file_name);
@@ -64,6 +65,7 @@ Stack *file_search(char *file_name) {
 
   memset(cwd_buf, '\0', CWD_BUF_CAP * sizeof(cwd_buf[0]));
 
+  // Begin.
   while (strcmp(getcwd(cwd_buf, CWD_BUF_CAP), "/") != 0) {
     dir = opendir(".");
     validate_directory(dir);
