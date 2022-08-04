@@ -7,15 +7,20 @@
 #include <string.h>
 #include <unistd.h>
 
+// Generic exit function.
 void panic(char *err_msg) {
   fprintf(stderr, "ERROR: %s\n", err_msg);
   exit(EXIT_FAILURE);
 }
 
-void validate_string(char *data) {
-  if (!data) {
-    panic("string failed to malloc.");
+// Safe malloc() wrapper function.
+void *s_malloc(const size_t nbytes) {
+  void *p = malloc(nbytes); 
+  if (!p) {
+    fprintf(stderr, "MALLOC ERR: failed to safely allocate %zu bytes.\n", nbytes);
+    exit(EXIT_FAILURE);
   }
+  return p;
 }
 
 void validate_directory(DIR *dir) {
@@ -79,7 +84,6 @@ Stack *file_search(char *file_name) {
 
         // Add '/filename' to the directory.
         char *cwd_with_filename = concat_cwd(cwd_buf, dirent->d_name);
-        validate_string(cwd_with_filename);
 
         // Put it into the hashtable. If it is already there, skip. Otherwise,
         // put it into the stack.
@@ -92,7 +96,6 @@ Stack *file_search(char *file_name) {
       if (strcmp(file_name, dirent->d_name) == 0 && !IS_DIR(dirent->d_type)) {
         // Push the directory into the results stack.
         char *tmp = (char *)malloc(sizeof(cwd_buf));
-        validate_string(tmp);
         strcpy(tmp, cwd_buf);
         stack_push(results, tmp);
       }
