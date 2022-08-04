@@ -36,7 +36,7 @@ char *concat_cwd(char *cwd, char *file_name) {
   char *res;
 
   // +1 for '/' and +1 for NULL.
-  if (!(res = (char *)malloc(cwd_sz + file_name_sz + 1 + 1))) {
+  if (!(res = (char *)s_malloc(cwd_sz + file_name_sz + 1 + 1))) {
     return NULL;
   }
 
@@ -56,7 +56,7 @@ void free_mem(Stack *stack, HashTable *hash_table, DIR *dir) {
 #define HIDDEN(x) (x[0] == '.')
 #define VALID_DIR(x) (strcmp(x, "..") != 0 && strcmp(x, "."))
 #define IS_DIR(x) (x & DT_DIR)
-#define CWD_BUF_CAP 2052
+#define CWD_BUF_CAP 4104
 
 Stack *file_search(char *file_name) {
 
@@ -95,7 +95,7 @@ Stack *file_search(char *file_name) {
       // Found the file.
       if (strcmp(file_name, dirent->d_name) == 0 && !IS_DIR(dirent->d_type)) {
         // Push the directory into the results stack.
-        char *tmp = (char *)malloc(sizeof(cwd_buf));
+        char *tmp = (char *)s_malloc(sizeof(cwd_buf));
         strcpy(tmp, cwd_buf);
         stack_push(results, tmp);
       }
